@@ -16,9 +16,8 @@
 				if($num) {  
 					echo '用户名已存在';  
 				} else {
-					$sql_insert = "insert into user (username, password) values('$user','$pwd')";  
+					$sql_insert = "insert into user (username, password, level) values('$user', '$pwd', '0')";  
 					$res_insert = mysqli_query($con, $sql_insert);  
-					//$num_insert = mysql_num_rows($res_insert);  
 					if($res_insert) {  
 						echo '注册成功！';  
 					} else {  
