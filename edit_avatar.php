@@ -14,7 +14,7 @@
 	else if(mysqli_num_rows($rs) != 1) { echo "数据库异常"; }
 	else echo "头像上传成功";
 	
-	exit;
+	exit();
 	
 	class FileUp {
 		public $target_path = "../img/avatar/";
