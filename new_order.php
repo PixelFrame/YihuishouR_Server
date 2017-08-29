@@ -11,51 +11,30 @@
 		exit();
 	} else {
 		$order = getArray($xmlStr);
-		$row = mysqli_fetch_row($result);
+		$uid = mysqli_fetch_assoc($result)['uid'];
 	}
 
-	function updateOrder($con, $oid, $alias, $attrib, $date, $status, $items) {
-		$sql_create = "CREATE TABLE IF NOT EXISTS orders_".$id.
-					"(oid INT NOT NULL,".
-					"alias VARCHAR(128),".
-					"attrib INT NOT NULL,".
-					"date LONG NOT NULL,".
-					"status INT NOT NULL),".
-					"iid INT NOT NULL".
-					"PRIMARY KEY(oid));";
-		$res_create=mysqli_query($con, $sql_create);
-		createItems($items);
-		if($res_create == false) {
+	function createOrder($con, $uid, $alias, $attrib, $date, $status, $items) {
+		$sql_insert = "INSERT INTO order".
+					"(oid, uid, alias, attrib, date, status)".
+					"VALUES".
+					"($alias', '$uid', '$attrib', '$date', '$status')";
+		$res_insert = mysqli_query($con, $sql_insert);
+		if ($res_insert == false) {
 			echo "无法创建订单";
-		} else {
-			$sql_insert = "INSERT INTO orders_".$id.
-						"(oid, alias, attrib, date, status, iid)".
-						"VALUES".
-						"('$oid', '$alias', '$attrib', '$date', '$status', '$iid')";
-			$res_insert = mysqli_query($con, $sql_insert);
-			if ($res_insert == false) {
-				echo "无法创建订单";
-			} else {
-				
-			} 
-		}
+		} else if(createItems($con, mysqli_fetch_assoc($res_insert)['oid'], $items)) {
+			echo "创建成功";
+		} else echo "创建失败";
 	}
 
 	function createItems($con, $items) {
-		$sql_create = "CREATE TABLE IF NOT EXISTS items_".$id.
-					"(name VARCHAR(128),".
-					"price INT NOT NULL,".
-					"catagory INT NOT NULL),".
-					"num INT NOT NULL".
-					"PRIMARY KEY(name));";
-		$res_create=mysqli_query($con, $sql_create);
 		foreach ($items as $item) {
-			$sql = "INSERT INTO items_".$iid.
-				"(name, price, catagory, num)".
+			$sql = "INSERT INTO items".
+				"(oid, name, price, catagory, num)".
 				"VALUES".
-				"('$item[0]', '$item[1]', '$item[2]', '$item[3]')";
-			mysqli_query($con, $sql);
+				"('$oid', '$item[0]', '$item[1]', '$item[2]', '$item[3]')";
+			if(mysqli_query($con, $sql) == false) return false;
 		}
-		return $iid;
+		return true;
 	}
 ?>
