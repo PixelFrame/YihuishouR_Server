@@ -1,4 +1,4 @@
-//XML Parser using DOMDocument
+//XML Parser using SimpleXML
 //Created by Pixel Frame
 
 <?php

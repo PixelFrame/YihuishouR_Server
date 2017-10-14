@@ -2,7 +2,7 @@
 	$xmlStr = $_POST["xmlStr"];
 	$uid = $_POST["id"];
 	require_once("db_config.php");
-	require("XML_parser.php");
+	//require("XML_parser.php");
 
 	$sql_select = "select * from user where uid ='$uid'";
 	$result = mysqli_query($con, $sql_select);
@@ -10,11 +10,19 @@
 		echo "FATAL ERROR: No such user";
 		exit();
 	} else {
+		/*
 		$dom = new DOMDocument();
 		$dom->loadXML($xmlStr);
 		$order = getArray($dom->documentElement);
-		createOrder($con, $uid, $order[0], $order[1], $order[5], $order[3], $order[4],$order[2]);
-		echo "success";
+		*/
+		$order = simplexml_load_string($xmlStr);
+		$oid = (string) $order->oid;
+		$alias = (string) $order->alias;
+		$attrib = (string) $order->attrib;
+		$date = (string) $order->date;
+		$status = (string) $order->status;
+		$items = $order->item;
+		createOrder($con, $uid, $oid, $alias, $attrib, $date, $status, $items);
 		exit();
 	}
 
@@ -26,17 +34,22 @@
 		$res_insert = mysqli_query($con, $sql_insert);
 		if ($res_insert == false) {
 			echo "无法创建订单";
-		} else if(createItems($con, mysqli_fetch_assoc($res_insert)['oid'], $items)) {
+		} else if(createItems($con, $oid, $items)) {
 			echo "创建成功";
 		} else echo "创建失败";
 	}
 
-	function createItems($con, $items) {
+	function createItems($con, $oid, $items) {
 		foreach ($items as $item) {
+			$iid = (string) $item->iid;
+			$name = (string) $item->name;
+			$price = (string) $item->price;
+			$catagory = (string) $item->catagory;
+			$num = (string) $item->num;
 			$sql = "INSERT INTO items".
-				"(oid, name, price, catagory, num)".
+				"(oid, iid, name, price, catagory, num)".
 				"VALUES".
-				"('$oid', '$item[0]', '$item[1]', '$item[2]', '$item[3]')";
+				"('$oid', '$iid', '$name', '$price', '$catagory', '$num')";
 			if(mysqli_query($con, $sql) == false) return false;
 		}
 		return true;
