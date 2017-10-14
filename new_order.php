@@ -15,7 +15,8 @@
 		$dom->loadXML($xmlStr);
 		$order = getArray($dom->documentElement);
 		*/
-		$order = simplexml_load_string($xmlStr);
+		$orders = simplexml_load_string($xmlStr);
+		$order = $orders->order;
 		$oid = (string) $order->oid;
 		$alias = (string) $order->alias;
 		$attrib = (string) $order->attrib;
@@ -27,9 +28,9 @@
 	}
 
 	function createOrder($con, $uid, $oid, $alias, $attrib, $date, $status, $items) {
-		$sql_insert = "INSERT INTO order".
+		$sql_insert = "INSERT INTO orders".
 					"(oid, uid, alias, attrib, date, status)".
-					"VALUES".
+					" VALUES ".
 					"('$oid', '$uid', '$alias', '$attrib', '$date', '$status')";
 		$res_insert = mysqli_query($con, $sql_insert);
 		if ($res_insert == false) {
