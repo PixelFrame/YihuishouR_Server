@@ -2,12 +2,6 @@
 //Created by Pixel Frame
 
 <?php
-    require("db_config.php");
-
-	$dom = new DOMDocument();
-	$dom->loadXML($xmlStr);
-	print_r(getArray($dom->documentElement));
-
 function getArray($node) {
 	$array = false;
 	if ($node->hasAttributes()) {
@@ -30,5 +24,4 @@ function getArray($node) {
 	}
 	return $array;
 }
-
 ?>

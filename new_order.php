@@ -1,24 +1,28 @@
 <?php
-	require "db_config.php";
-	require "XML_parser.php";
 	$xmlStr = $_POST["xmlStr"];
-	$id = $_POST["id"];
+	$uid = $_POST["id"];
+	require_once("db_config.php");
+	require("XML_parser.php");
 
-	$sql_select = "select * from user where id ='$id'";
+	$sql_select = "select * from user where uid ='$uid'";
 	$result = mysqli_query($con, $sql_select);
 	if ($result == false) {
 		echo "FATAL ERROR: No such user";
 		exit();
 	} else {
-		$order = getArray($xmlStr);
-		$uid = mysqli_fetch_assoc($result)['uid'];
+		$dom = new DOMDocument();
+		$dom->loadXML($xmlStr);
+		$order = getArray($dom->documentElement);
+		createOrder($con, $uid, $order[0], $order[1], $order[5], $order[3], $order[4],$order[2]);
+		echo "success";
+		exit();
 	}
 
-	function createOrder($con, $uid, $alias, $attrib, $date, $status, $items) {
+	function createOrder($con, $uid, $oid, $alias, $attrib, $date, $status, $items) {
 		$sql_insert = "INSERT INTO order".
 					"(oid, uid, alias, attrib, date, status)".
 					"VALUES".
-					"($alias', '$uid', '$attrib', '$date', '$status')";
+					"('$oid', '$uid', '$alias', '$attrib', '$date', '$status')";
 		$res_insert = mysqli_query($con, $sql_insert);
 		if ($res_insert == false) {
 			echo "无法创建订单";
