@@ -1,8 +1,8 @@
 <?php
 	$xmlStr = $_POST["xmlStr"];
-	$uid = $_POST["id"];
+	$uid = $_POST["uid"];
 	require_once("db_config.php");
-	//require("XML_parser.php");
+	//require("XML_parser.php"); //已废弃的DOMDocument解析方案
 
 	$sql_select = "select * from user where uid ='$uid'";
 	$result = mysqli_query($con, $sql_select);
