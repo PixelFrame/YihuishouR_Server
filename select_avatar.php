@@ -1,6 +1,6 @@
 <?php
     require("db_config.php");
-    $uid = $_POST["id"];
+    $uid = $_POST["uid"];
     $aid = $_POST["aid"];
     $avatar_path = "http://115.159.188.117/img/Avatar/" + $aid + ".png";
     $sql = "update user set avatar = '$avatar_path' where uid = '$uid'";

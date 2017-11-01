@@ -10,15 +10,24 @@ function OtoXml($res){
 		$array_field[$index] = $finfo->name;
 		++$index;
 	}
-	$row = mysqli_fetch_array($res, MYSQLI_ASSOC);
-	$root = $dom->createElement("order");
+	$row = array();
+	$index = 0;
+	while($cur_row = mysqli_fetch_array($res, MYSQLI_ASSOC)){
+		$row[$index] = $cur_row;
+		++$index;
+	}
+	$root = $dom->createElement("orders");
 	$dom->appendChild($root);
-	$i = 0;
-	foreach($array_field as $fd) {
-		$node[$i] = $dom->createElement($fd);
-		$node[$i]->appendChild($dom->createTextNode($row[$fd]));
-		$root->appendChild($node[$i]);
-		++$i;
+	foreach ($row as $cur_row) {
+		$node_order = $dom->createElement("order");
+		$root->appendChild($node_order);
+		$i = 0;
+		foreach($array_field as $fd) {
+			$node[$i] = $dom->createElement($fd);
+			$node[$i]->appendChild($dom->createTextNode($cur_row[$fd]));
+			$node_order->appendChild($node[$i]);
+			++$i;
+		}
 	}
 	echo $dom->saveXML();
 	$dom->save("D:/Server/Log/order.xml");
