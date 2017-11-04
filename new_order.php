@@ -22,15 +22,16 @@
 		$date = (string) $order->date;
 		$status = (string) $order->status;
 		$items = $order->item;
+		$location = (string) $order->location;
 		createOrder($con, $uid, $alias, $attrib, $date, $status, $items);
 		exit();
 	}
 
-	function createOrder($con, $uid, $alias, $attrib, $date, $status, $items) {
+	function createOrder($con, $uid, $alias, $attrib, $date, $status, $items, $location) {
 		$sql_insert = "INSERT INTO orders".
-					"(uid, alias, attrib, date, status)".
+					"(uid, alias, attrib, date, status, location)".
 					" VALUES ".
-					"('$uid', '$alias', '$attrib', '$date', '$status')";
+					"('$uid', '$alias', '$attrib', '$date', '$status', '$location')";
 		$res_insert = mysqli_query($con, $sql_insert);
 		$sql_find_oid = "SELECT oid FROM ORDERS WHERE uid = '$uid' AND date = '$date'";
 		$res_find_oid = mysqli_query($con, $sql_find_oid);
