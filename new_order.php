@@ -23,7 +23,7 @@
 		$status = (string) $order->status;
 		$items = $order->item;
 		$location = (string) $order->location;
-		createOrder($con, $uid, $alias, $attrib, $date, $status, $items);
+		createOrder($con, $uid, $alias, $attrib, $date, $status, $items, $location);
 		exit();
 	}
 
@@ -40,6 +40,9 @@
 			echo "无法创建订单";
 		} else if(createItems($con, $oid, $items)) {
 			echo "创建成功";
+			$file = fopen("D:\\Server\\Log\\isnew.txt", "w+");
+			fwrite($file, "TRUE");
+			fclose($file);
 		} else echo "创建失败";
 	}
 
